@@ -1112,19 +1112,34 @@
         if (!activeSelectedProduct) return;
         const baseUrl = window.location.href.split("#")[0].split("?")[0];
         const productUrl = `${baseUrl}#product-${activeSelectedProduct.id}`;
+
+        const shareText = `شاهد هذا المنتج من رامه الشرق للسيراميك:\n${activeSelectedProduct.name} - السعر: ${activeSelectedProduct.price} ريال\n${productUrl}`;
+
         if (navigator.share) {
           try {
             await navigator.share({
               title: activeSelectedProduct.name,
+              text: shareText,
               url: productUrl
             });
-          } catch (err) {}
+          } catch (err) {
+            if (err.name !== "AbortError") fallbackCopyLink(productUrl);
+          }
         } else {
-          navigator.clipboard
-            .writeText(productUrl)
-            .then(() => showToast("📋 تم نسخ الرابط!"));
+          fallbackCopyLink(productUrl);
         }
       };
+
+      function fallbackCopyLink(url) {
+        navigator.clipboard
+          .writeText(url)
+          .then(() => {
+            showToast("📋 تم نسخ رابط المنتج بنجاح!");
+          })
+          .catch(() => {
+            prompt("انسخ الرابط:", url);
+          });
+      }
 
       function checkUrlHashForProduct() {
         const hash = window.location.hash;
