@@ -1,7 +1,8 @@
 {
   "name": "رامه الشرق للسيراميك",
   "short_name": "رامه الشرق",
-  "start_url": "/",
+  "start_url": "/Ramah/",
+  "scope": "/Ramah/",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#1e293b",
